@@ -1,4 +1,3 @@
-// app/page.js
 'use client';
 
 import { useState } from 'react';
@@ -37,7 +36,7 @@ export default function LoginPage() {
         <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
           {/* Header Section */}
           <div className="bg-[#8E1A2A] px-6 py-8 text-center">
-            <h1 className="text-3xl font-bold text-white mb-2">Omowunmi's Kitchen</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">Omowunmi&apos;s Kitchen</h1>
             <p className="text-gray-200">Admin Portal</p>
           </div>
 

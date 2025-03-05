@@ -1,4 +1,3 @@
-// app/dashboard/page.js
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -86,7 +85,9 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back, Admin</h1>
-        <p className="text-gray-600">Here's what's happening with your business today.</p>
+        <p className="text-gray-600">
+          Here&apos;s what&apos;s happening with your business today.
+        </p>
       </div>
 
       {/* Stats Grid */}
@@ -181,7 +182,7 @@ export default function DashboardPage() {
               <div>
                 <p className="font-medium text-gray-900">New booking: {booking.client_name}</p>
                 <p className="text-sm text-gray-500">
-                  Delivery Date: {booking.delivery_date} • Total: ₦{booking.total_fee}
+                  Delivery Date: {booking.delivery_date} &#8226; Total: ₦{booking.total_fee}
                 </p>
               </div>
               <button 
