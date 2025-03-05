@@ -96,7 +96,7 @@ export default function DashboardPage() {
         <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-[#8E1A2A]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Today's Bookings</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">Today&apos;s Bookings</p>
               <p className="text-2xl font-bold text-gray-900">{stats.todayBookings}</p>
             </div>
             <div className="bg-[#8E1A2A] bg-opacity-10 p-3 rounded-full">
