@@ -32,34 +32,70 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-80">
-        <h2 className="text-xl font-bold mb-4">Admin Login</h2>
-        {error && <p className="text-red-500 mb-2">{error}</p>}
-        <div className="mb-4">
-          <label className="block mb-1">Email</label>
-          <input
-            type="email"
-            className="border p-2 w-full"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8E1A2A] to-black">
+      <div className="max-w-md w-full mx-4">
+        <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
+          {/* Header Section */}
+          <div className="bg-[#8E1A2A] px-6 py-8 text-center">
+            <h1 className="text-3xl font-bold text-white mb-2">Omowunmi's Kitchen</h1>
+            <p className="text-gray-200">Admin Portal</p>
+          </div>
+
+          {/* Form Section */}
+          <form onSubmit={handleSubmit} className="p-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Welcome Back</h2>
+            
+            {error && (
+              <div className="mb-6 p-3 bg-red-50 border-l-4 border-red-500 text-red-700">
+                <p>{error}</p>
+              </div>
+            )}
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#8E1A2A] focus:border-transparent transition duration-200 outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#8E1A2A] focus:border-transparent transition duration-200 outline-none"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-[#8E1A2A] text-white py-3 rounded-lg font-semibold hover:bg-[#701521] transition duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-md"
+              >
+                Sign In
+              </button>
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                Need help? Contact system administrator
+              </p>
+            </div>
+          </form>
         </div>
-        <div className="mb-4">
-          <label className="block mb-1">Password</label>
-          <input
-            type="password"
-            className="border p-2 w-full"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
-          Login
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
