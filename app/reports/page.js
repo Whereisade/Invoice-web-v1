@@ -105,7 +105,7 @@ export default function ReportsPage() {
       {revenue !== null && (
         <div className="mb-4">
           <h3 className="font-bold">Total Revenue</h3>
-          <p className="text-xl">{revenue}</p>
+          <p className="text-xl">₦{revenue}</p>
         </div>
       )}
 
@@ -123,7 +123,7 @@ export default function ReportsPage() {
               {bankFees.map((bankFee, index) => (
                 <tr key={index}>
                   <td className="py-2 px-4 border">{bankFee.bank}</td>
-                  <td className="py-2 px-4 border">{bankFee.total_fee}</td>
+                  <td className="py-2 px-4 border">₦{bankFee.total_fee}</td>
                 </tr>
               ))}
             </tbody>

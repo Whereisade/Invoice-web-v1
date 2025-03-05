@@ -77,7 +77,7 @@ export default function BookingsPage() {
                 {booking.payment_method}
               </td>
               <td className="py-2 px-4 border text-center">
-                {booking.total_fee}
+              ₦{booking.total_fee}
               </td>
             </tr>
           ))}
