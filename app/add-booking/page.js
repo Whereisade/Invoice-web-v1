@@ -16,7 +16,8 @@ export default function AddBookingPage() {
     transport_cost: '',
     discount: '0',
     payment_status: 'PAID',
-    rented_items: [{ name: '', price: '', unit: 1 }], // unit is now numeric
+    // Use 'rented_items_data' here to match the serializer's write-only field
+    rented_items_data: [{ name: '', price: '', unit: 1 }],
   });
   const [error, setError] = useState('');
   const router = useRouter();
@@ -32,16 +33,16 @@ export default function AddBookingPage() {
   const handleItemChange = (index, e) => {
     const { name, value } = e.target;
     setBooking((prev) => {
-      const items = [...prev.rented_items];
+      const items = [...prev.rented_items_data];
       items[index] = { ...items[index], [name]: name === 'unit' ? Number(value) : value };
-      return { ...prev, rented_items: items };
+      return { ...prev, rented_items_data: items };
     });
   };
 
   const addItem = () => {
     setBooking((prev) => ({
       ...prev,
-      rented_items: [...prev.rented_items, { name: '', price: '', unit: 1 }],
+      rented_items_data: [...prev.rented_items_data, { name: '', price: '', unit: 1 }],
     }));
   };
 
@@ -78,9 +79,7 @@ export default function AddBookingPage() {
             type="text"
             className="border p-2 w-full"
             value={booking.client_name}
-            onChange={(e) =>
-              setBooking({ ...booking, client_name: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, client_name: e.target.value })}
             required
           />
         </div>
@@ -89,9 +88,7 @@ export default function AddBookingPage() {
           <textarea
             className="border p-2 w-full"
             value={booking.address}
-            onChange={(e) =>
-              setBooking({ ...booking, address: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, address: e.target.value })}
             required
           />
         </div>
@@ -100,9 +97,7 @@ export default function AddBookingPage() {
           <select
             className="border p-2 w-full"
             value={booking.payment_method}
-            onChange={(e) =>
-              setBooking({ ...booking, payment_method: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, payment_method: e.target.value })}
           >
             <option value="POLARIS">Polaris Bank</option>
             <option value="ACCESS">Access Bank</option>
@@ -117,9 +112,7 @@ export default function AddBookingPage() {
             type="date"
             className="border p-2 w-full"
             value={booking.delivery_date}
-            onChange={(e) =>
-              setBooking({ ...booking, delivery_date: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, delivery_date: e.target.value })}
             required
           />
         </div>
@@ -129,9 +122,7 @@ export default function AddBookingPage() {
             type="date"
             className="border p-2 w-full"
             value={booking.current_date}
-            onChange={(e) =>
-              setBooking({ ...booking, current_date: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, current_date: e.target.value })}
             required
           />
         </div>
@@ -141,9 +132,7 @@ export default function AddBookingPage() {
             type="date"
             className="border p-2 w-full"
             value={booking.expected_return_date}
-            onChange={(e) =>
-              setBooking({ ...booking, expected_return_date: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, expected_return_date: e.target.value })}
             required
           />
         </div>
@@ -154,9 +143,7 @@ export default function AddBookingPage() {
             step="0.01"
             className="border p-2 w-full"
             value={booking.transport_cost}
-            onChange={(e) =>
-              setBooking({ ...booking, transport_cost: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, transport_cost: e.target.value })}
             required
           />
         </div>
@@ -167,9 +154,7 @@ export default function AddBookingPage() {
             step="0.01"
             className="border p-2 w-full"
             value={booking.discount}
-            onChange={(e) =>
-              setBooking({ ...booking, discount: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, discount: e.target.value })}
           />
         </div>
         <div>
@@ -177,9 +162,7 @@ export default function AddBookingPage() {
           <select
             className="border p-2 w-full"
             value={booking.payment_status}
-            onChange={(e) =>
-              setBooking({ ...booking, payment_status: e.target.value })
-            }
+            onChange={(e) => setBooking({ ...booking, payment_status: e.target.value })}
           >
             <option value="PAID">PAID</option>
             <option value="PAID_AND_SUPPLY">PAID AND SUPPLY</option>
@@ -187,7 +170,7 @@ export default function AddBookingPage() {
         </div>
         <div>
           <h3 className="font-bold">Rented Items</h3>
-          {booking.rented_items.map((item, index) => (
+          {booking.rented_items_data.map((item, index) => (
             <div key={index} className="mb-2 flex space-x-2">
               <input
                 type="text"
