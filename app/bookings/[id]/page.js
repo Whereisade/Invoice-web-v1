@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { API_BASE_URL } from '../../../config';
-import { FaSpinner, FaArrowLeft, FaPrint, FaEdit } from 'react-icons/fa';
+import { FaSpinner, FaArrowLeft, FaPrint, FaEdit, FaTrash } from 'react-icons/fa';
 
 export default function BookingDetailsPage() {
   const { id } = useParams();
@@ -11,7 +11,7 @@ export default function BookingDetailsPage() {
   const [booking, setBooking] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [updatedPaymentStatus, setUpdatedPaymentStatus] = useState(booking?.payment_status || '');
+  const [updatedPaymentStatus, setUpdatedPaymentStatus] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
@@ -70,6 +70,29 @@ export default function BookingDetailsPage() {
     }
   };
 
+  const handleDeleteBooking = async () => {
+    const token = localStorage.getItem('token');
+    if (!confirm('Are you sure you want to delete this booking?')) {
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE_URL}/bookings/${id}/`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Error deleting booking');
+      }
+      // After deletion, redirect to bookings list
+      router.push('/bookings');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (error) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -120,6 +143,13 @@ export default function BookingDetailsPage() {
               >
                 <FaEdit className="mr-2" />
                 Edit
+              </button>
+              <button
+                onClick={handleDeleteBooking}
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
+              >
+                <FaTrash className="mr-2" />
+                Delete
               </button>
             </div>
           </div>
@@ -177,10 +207,14 @@ export default function BookingDetailsPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Payment Status</p>
-                <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full 
-                  ${booking.payment_status === 'PAID' 
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-green-100 text-green-800'}`}
+                <span
+                  className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
+                    booking.payment_status === 'PAID'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : booking.payment_status === 'PENDING'
+                      ? 'bg-gray-100 text-gray-800'
+                      : 'bg-green-100 text-green-800'
+                  }`}
                 >
                   {booking.payment_status}
                 </span>
@@ -264,7 +298,7 @@ export default function BookingDetailsPage() {
             </div>
           </div>
 
-          {/* Total */}
+          {/* Total Fee */}
           <div className="bg-gray-800 p-6 rounded-lg text-white">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Total Fee</h2>
