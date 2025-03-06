@@ -11,6 +11,8 @@ export default function BookingDetailsPage() {
   const [booking, setBooking] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [updatedPaymentStatus, setUpdatedPaymentStatus] = useState(booking?.payment_status || '');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     // Check if user is authenticated
@@ -31,6 +33,7 @@ export default function BookingDetailsPage() {
         }
         const data = await res.json();
         setBooking(data);
+        setUpdatedPaymentStatus(data.payment_status);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,6 +46,28 @@ export default function BookingDetailsPage() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleUpdatePaymentStatus = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      const res = await fetch(`${API_BASE_URL}/bookings/${id}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({ payment_status: updatedPaymentStatus }),
+      });
+      if (!res.ok) {
+        throw new Error('Failed to update payment status');
+      }
+      setSuccessMessage('Payment status updated successfully!');
+      const updatedBooking = await res.json();
+      setBooking(updatedBooking);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   if (error) {
@@ -152,10 +177,10 @@ export default function BookingDetailsPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Payment Status</p>
-                <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full
+                <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full 
                   ${booking.payment_status === 'PAID' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-yellow-100 text-yellow-800'}`}
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-green-100 text-green-800'}`}
                 >
                   {booking.payment_status}
                 </span>
@@ -169,6 +194,31 @@ export default function BookingDetailsPage() {
                 <p className="text-lg font-medium text-gray-900">₦{booking.discount}</p>
               </div>
             </div>
+          </div>
+
+          {/* Update Payment Status */}
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Update Payment Status</h2>
+            <select
+              value={updatedPaymentStatus}
+              onChange={(e) => setUpdatedPaymentStatus(e.target.value)}
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-[#8E1A2A] focus:ring focus:ring-[#8E1A2A] focus:ring-opacity-50"
+            >
+              <option value="PAID">PAID</option>
+              <option value="PAID_AND_SUPPLY">PAID AND SUPPLY</option>
+              <option value="PENDING">PENDING</option>
+            </select>
+            <button
+              onClick={handleUpdatePaymentStatus}
+              className="mt-4 px-4 py-2 bg-[#8E1A2A] text-white rounded-md hover:bg-[#701521] transition-colors duration-200"
+            >
+              Update Payment Status
+            </button>
+            {successMessage && (
+              <div className="mt-2 p-3 bg-green-50 border-l-4 border-green-500 text-green-700">
+                <p>{successMessage}</p>
+              </div>
+            )}
           </div>
 
           {/* Rented Items */}

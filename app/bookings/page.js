@@ -152,8 +152,8 @@ export default function BookingsPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                             ${booking.payment_status === 'PAID' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-yellow-100 text-yellow-800'}`}
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-green-100 text-green-800'}`}
                           >
                             {booking.payment_status}
                           </span>
@@ -209,8 +209,8 @@ export default function BookingsPage() {
                       <div className="mt-2">
                         <span className={`px-2 py-1 text-xs font-semibold rounded-full 
                           ${booking.payment_status === 'PAID' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-yellow-100 text-yellow-800'}`}
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-green-100 text-green-800'}`}
                         >
                           {booking.payment_status}
                         </span>
