@@ -10,6 +10,7 @@ export default function ReportsPage() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [revenue, setRevenue] = useState(null);
+  const [transportFee, setTransportFee] = useState(null);
   const [bankFees, setBankFees] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,8 +40,11 @@ export default function ReportsPage() {
       }
       const data = await res.json();
       setRevenue(data.total_revenue);
+      setTransportFee(data.total_transport_fee);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,6 +173,22 @@ export default function ReportsPage() {
                 </div>
               </div>
               <p className="text-3xl font-bold text-gray-900">₦{revenue.toLocaleString()}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {month ? `Month: ${month}` : 'All months'} {year ? `Year: ${year}` : ''}
+              </p>
+            </div>
+          )}
+
+          {/* Redesigned Total Transport Fee Display */}
+          {transportFee !== null && (
+            <div className="bg-gray-50 p-6 rounded-lg mb-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Total Transport Fee</h3>
+                <div className="bg-[#8E1A2A] bg-opacity-10 p-3 rounded-full">
+                  <FaMoneyBillWave className="w-6 h-6 text-[#8E1A2A]" />
+                </div>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">₦{transportFee.toLocaleString()}</p>
               <p className="text-sm text-gray-500 mt-1">
                 {month ? `Month: ${month}` : 'All months'} {year ? `Year: ${year}` : ''}
               </p>
