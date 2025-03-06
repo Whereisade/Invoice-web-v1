@@ -21,6 +21,7 @@ export default function AddBookingPage() {
     rented_items_data: [{ name: '', price: '', unit: 1 }],
   });
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const router = useRouter();
 
   // Protect the page
@@ -59,6 +60,8 @@ export default function AddBookingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    setError('');
+    setSuccessMessage('');
     try {
       const res = await fetch(`${API_BASE_URL}/bookings/`, {
         method: 'POST',
@@ -72,6 +75,7 @@ export default function AddBookingPage() {
         const data = await res.json();
         throw new Error(data.error || 'Error creating booking');
       }
+      setSuccessMessage('Booking created successfully!');
       router.push('/bookings');
     } catch (err) {
       setError(err.message);
@@ -89,6 +93,12 @@ export default function AddBookingPage() {
         {error && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 m-6">
             <p className="text-red-700">{error}</p>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 text-green-700">
+            <p>{successMessage}</p>
           </div>
         )}
 
