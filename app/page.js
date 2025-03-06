@@ -8,11 +8,13 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess(false);
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login/`, {
         method: 'POST',
@@ -24,6 +26,7 @@ export default function LoginPage() {
         throw new Error(data.error || 'Login failed');
       }
       localStorage.setItem('token', data.token);
+      setSuccess(true);
       router.push('/dashboard');
     } catch (err) {
       setError(err.message);
@@ -47,6 +50,12 @@ export default function LoginPage() {
             {error && (
               <div className="mb-6 p-3 bg-red-50 border-l-4 border-red-500 text-red-700">
                 <p>{error}</p>
+              </div>
+            )}
+
+            {success && (
+              <div className="mb-6 p-3 bg-green-50 border-l-4 border-green-500 text-green-700">
+                <p>Login successful! Redirecting...</p>
               </div>
             )}
 
