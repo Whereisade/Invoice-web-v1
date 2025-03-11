@@ -122,21 +122,27 @@ export default function BookingDetailsPage() {
         doc.text(`Address: ${booking.address}`, 14, 100);
         doc.text(`Payment Method: ${booking.payment_method}`, 14, 110);
         doc.text(`Payment Status: ${booking.payment_status}`, 14, 120);
-        doc.text(`Transport Cost: ₦${booking.transport_cost}`, 14, 130);
-        doc.text(`Discount: ₦${booking.discount}`, 14, 140);
-        doc.text(`Total Fee: ₦${booking.total_fee}`, 14, 150);
+        
+        // Add booking dates
+        doc.text(`Current Date: ${new Date(booking.current_date).toLocaleDateString()}`, 14, 130);
+        doc.text(`Delivery Date: ${new Date(booking.delivery_date).toLocaleDateString()}`, 14, 140);
+        doc.text(`Expected Return Date: ${new Date(booking.expected_return_date).toLocaleDateString()}`, 14, 150);
+        
+        doc.text(`Transport Cost: ₦${booking.transport_cost}`, 14, 160);
+        doc.text(`Discount: ₦${booking.discount}`, 14, 170);
+        doc.text(`Total Fee: ₦${booking.total_fee}`, 14, 180);
 
         // Add a line separator
         doc.setDrawColor(200, 200, 200); // Light gray color
-        doc.line(14, 155, 196, 155); // Line from (x1, y1) to (x2, y2)
+        doc.line(14, 185, 196, 185); // Line from (x1, y1) to (x2, y2)
 
         // Add rented items header
         doc.setFontSize(16);
         doc.setTextColor(...primaryColor); // Use primary color
-        doc.text("Rented Items:", 14, 165);
+        doc.text("Rented Items:", 14, 195);
 
         // Add rented items in a table format
-        const startY = 175;
+        const startY = 205;
         const itemHeight = 10;
         doc.setFontSize(12);
         booking.rented_items.forEach((item, index) => {
