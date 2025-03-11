@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { API_BASE_URL } from '../../../config';
 import { FaSpinner, FaArrowLeft, FaPrint, FaEdit, FaTrash } from 'react-icons/fa';
+import { jsPDF } from "jspdf";
 
 export default function BookingDetailsPage() {
   const { id } = useParams();
@@ -93,6 +94,65 @@ export default function BookingDetailsPage() {
     }
   };
 
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+    const primaryColor = [142, 26, 42]; // RGB for #8E1A2A
+
+    // Create a promise to load the logo
+    const logoPromise = new Promise((resolve, reject) => {
+      const logo = new Image();
+      logo.src = '/wk.png'; // Update with the correct path to your logo
+      logo.onload = () => resolve(logo);
+      logo.onerror = () => reject(new Error('Logo failed to load'));
+    });
+
+    logoPromise
+      .then((logo) => {
+        doc.addImage(logo, 'PNG', 14, 10, 50, 50); // Adjust the position and size as needed
+
+        // Set title
+        doc.setFontSize(22);
+        doc.setTextColor(...primaryColor); // Use primary color
+        doc.text("Booking Summary", 14, 70);
+
+        // Add client details
+        doc.setFontSize(14);
+        doc.setTextColor(60, 60, 60); // Medium gray color
+        doc.text(`Client Name: ${booking.client_name}`, 14, 90);
+        doc.text(`Address: ${booking.address}`, 14, 100);
+        doc.text(`Payment Method: ${booking.payment_method}`, 14, 110);
+        doc.text(`Payment Status: ${booking.payment_status}`, 14, 120);
+        doc.text(`Transport Cost: ₦${booking.transport_cost}`, 14, 130);
+        doc.text(`Discount: ₦${booking.discount}`, 14, 140);
+        doc.text(`Total Fee: ₦${booking.total_fee}`, 14, 150);
+
+        // Add a line separator
+        doc.setDrawColor(200, 200, 200); // Light gray color
+        doc.line(14, 155, 196, 155); // Line from (x1, y1) to (x2, y2)
+
+        // Add rented items header
+        doc.setFontSize(16);
+        doc.setTextColor(...primaryColor); // Use primary color
+        doc.text("Rented Items:", 14, 165);
+
+        // Add rented items in a table format
+        const startY = 175;
+        const itemHeight = 10;
+        doc.setFontSize(12);
+        booking.rented_items.forEach((item, index) => {
+          const yPosition = startY + (index * itemHeight);
+          doc.text(`${item.name} - ₦${item.price} x ${item.unit}`, 14, yPosition);
+        });
+
+        // Save the PDF
+        doc.save(`booking_summary_${booking.id}.pdf`);
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('Failed to generate PDF: ' + error.message);
+      });
+  };
+
   if (error) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -129,7 +189,7 @@ export default function BookingDetailsPage() {
                 <p className="text-gray-200 mt-1">Reference ID: {booking.id}</p>
               </div>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
               <button
                 onClick={handlePrint}
                 className="flex items-center px-4 py-2 bg-white text-[#8E1A2A] rounded-md hover:bg-gray-100 transition-colors duration-200"
@@ -150,6 +210,12 @@ export default function BookingDetailsPage() {
               >
                 <FaTrash className="mr-2" />
                 Delete
+              </button>
+              <button
+                onClick={handleExportPDF}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+              >
+                Export to PDF
               </button>
             </div>
           </div>
